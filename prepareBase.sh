@@ -1,9 +1,11 @@
-!#/bin/bash
+#!/bin/bash
 
 # --------------------------------------------------
 # kubernetes preperation script
 # written by Martin Schmidt (itze@mailbox.org)
 # repo: https://github.com/itzecode/kube-init
+# --------------------------------------------------
+# Step 1: prepare base on all nodes
 # --------------------------------------------------
 
 # update system ------------------------------------
