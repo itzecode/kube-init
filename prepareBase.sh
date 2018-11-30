@@ -1,27 +1,33 @@
 !#/bin/bash
 
-# update system
+# --------------------------------------------------
+# kubernetes preperation script
+# written by Martin Schmidt (itze@mailbox.org)
+# repo: https://github.com/itzecode/kube-init
+# --------------------------------------------------
+
+# update system ------------------------------------
 yum update -y
 
-# Disable swap
+# Disable swap -------------------------------------
 swapoff -a
 sed -i "`grep -n swap /etc/fstab | awk -F: '{ print $1; }'`s/^/#/" /etc/fstab
 
-# Disable SELinux
+# Disable SELinux ----------------------------------
 setenforce 0
 sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
 
-# Enable br_netfilter kernel module
+# Enable br_netfilter kernel module ----------------
 modprobe br_netfilter
 echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
 
-# Install docker
+# Install docker -----------------------------------
 curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
 systemctl enable docker.service
 systemctl start  docker.service
 
-# Install Kubernetes Repository
+# Install Kubernetes Repository --------------------
 cat <<EOF > /etc/yum.repos.d/active/kubernetes.repo
 [kubernetes]
 name=Kubernetes
@@ -34,4 +40,5 @@ gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
 EOF
 yum install -y kubelet kubeadm kubectl
 
-# to be continued ...
+# next step ---------------------------------------
+echo ""; echo " >> next, run prepareMaster.sh or prepareNode.sh based on the role!"; echo ""
